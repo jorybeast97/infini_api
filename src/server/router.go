@@ -17,15 +17,24 @@ func BuildRouter(cfg config.Config, s Services) *gin.Engine {
 	r.Use(middleware.CORS())
 	r.Static("/uploads", cfg.UploadDir)
 
-	r.POST("/api/auth/login", apiauth.LoginHandler(s.Auth))
-	r.GET("/api/authors", apiauthors.ListHandler(s.Authors))
-	r.GET("/api/posts", apiposts.ListHandler(s.Posts))
-	r.GET("/api/hello", apihello.HelloHandler())
-	r.GET("/api/users", apiusers.ListHandler(s.Users))
-	r.GET("/api/users/:id", apiusers.GetHandler(s.Users))
-	r.POST("/api/users", apiusers.CreateHandler(s.Users))
-	r.PUT("/api/users/:id", apiusers.UpdateHandler(s.Users))
-	r.DELETE("/api/users/:id", apiusers.DeleteHandler(s.Users))
+    r.POST("/api/auth/login", apiauth.LoginHandler(s.Auth))
+    r.POST("/api/auth/me", apiauth.MeHandler(s.Tokens, s.Users))
+    r.POST("/api/auth/register", apiauth.RegisterHandler(s.Users))
+
+    r.POST("/api/authors/list", apiauthors.ListHandler(s.Authors))
+
+    r.POST("/api/posts/list", apiposts.ListHandler(s.Posts))
+    r.POST("/api/posts/get", apiposts.GetHandler(s.Posts))
+    r.POST("/api/posts/save", apiposts.SaveHandler(s.Posts))
+    r.POST("/api/posts/delete", apiposts.DeleteHandler(s.Posts))
+
+    r.POST("/api/hello", apihello.HelloHandler())
+
+    r.POST("/api/users/list", apiusers.ListHandler(s.Users))
+    r.POST("/api/users/get", apiusers.GetHandler(s.Users))
+    r.POST("/api/users/create", apiusers.CreateHandler(s.Users))
+    r.POST("/api/users/update", apiusers.UpdateHandler(s.Users))
+    r.POST("/api/users/delete", apiusers.DeleteHandler(s.Users))
 
 	return r
 }

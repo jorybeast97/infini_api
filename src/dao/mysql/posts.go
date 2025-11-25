@@ -2,6 +2,7 @@ package mysql
 
 import (
     "context"
+    "strings"
     "time"
     "infini_api/src/domain"
     "gorm.io/gorm"
@@ -19,7 +20,24 @@ func (r *PostsRepo) List(ctx context.Context, q, status string, hasLocation *boo
         if *hasLocation { tx = tx.Where("location IS NOT NULL AND location != ''") } else { tx = tx.Where("location IS NULL OR location = ''") }
     }
     if q != "" { tx = tx.Where("title LIKE ? OR excerpt LIKE ? OR content LIKE ?", "%"+q+"%", "%"+q+"%", "%"+q+"%") }
-    if sort != "" { tx = tx.Order(sort) }
+    if sort != "" {
+        allowed := map[string]string{"date":"date","title":"title","id":"id"}
+        parts := strings.Split(sort, ",")
+        for _, p := range parts {
+            p = strings.TrimSpace(p)
+            if p == "" { continue }
+            fd := strings.Split(p, ":")
+            field := strings.TrimSpace(fd[0])
+            dir := "asc"
+            if len(fd) > 1 {
+                d := strings.ToLower(strings.TrimSpace(fd[1]))
+                if d == "desc" { dir = "desc" }
+            }
+            if col, ok := allowed[field]; ok {
+                tx = tx.Order(col + " " + dir)
+            }
+        }
+    }
     var total int64
     if err := tx.Model(&domain.BlogPost{}).Count(&total).Error; err != nil { return nil, domain.Meta{}, err }
     if err := tx.Offset((page-1)*limit).Limit(limit).Find(&items).Error; err != nil { return nil, domain.Meta{}, err }

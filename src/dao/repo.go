@@ -40,6 +40,7 @@ type AppsRepository interface {
 type UsersRepository interface {
     List(ctx context.Context, q string, page, limit int) ([]domain.User, domain.Meta, error)
     Get(ctx context.Context, id string) (domain.User, error)
+    GetByUserName(ctx context.Context, userName string) (domain.User, error)
     Create(ctx context.Context, u domain.User) (domain.User, error)
     Update(ctx context.Context, id string, u domain.User) (domain.User, error)
     Delete(ctx context.Context, id string) error

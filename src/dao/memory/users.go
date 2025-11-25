@@ -24,6 +24,12 @@ func (r *UsersRepo) Get(ctx context.Context, id string) (domain.User, error) {
     return domain.User{}, domain.AppError{Code: "NOT_FOUND", Message: "user not found"}
 }
 
+func (r *UsersRepo) GetByUserName(ctx context.Context, userName string) (domain.User, error) {
+    r.s.mu.RLock(); defer r.s.mu.RUnlock()
+    for _, u := range r.s.users { if u.UserName == userName { return u, nil } }
+    return domain.User{}, domain.AppError{Code: "NOT_FOUND", Message: "user not found"}
+}
+
 func (r *UsersRepo) Create(ctx context.Context, u domain.User) (domain.User, error) {
     r.s.mu.Lock(); defer r.s.mu.Unlock()
     if u.ID == "" { u.ID = genID() }
@@ -44,4 +50,3 @@ func (r *UsersRepo) Delete(ctx context.Context, id string) error {
     for i := range r.s.users { if r.s.users[i].ID == id { r.s.users = append(r.s.users[:i], r.s.users[i+1:]...); return nil } }
     return domain.AppError{Code: "NOT_FOUND", Message: "user not found"}
 }
-
