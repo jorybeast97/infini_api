@@ -1,8 +1,8 @@
 package dao
 
 import (
-	"context"
-	"infini_api/src/domain"
+    "context"
+    "infini_api/src/domain"
 )
 
 type AuthorsRepository interface {
@@ -30,9 +30,17 @@ type PhotosRepository interface {
 }
 
 type AppsRepository interface {
-	List(ctx context.Context) ([]domain.AppProject, error)
-	Get(ctx context.Context, id string) (domain.AppProject, error)
-	Create(ctx context.Context, a domain.AppProject) (domain.AppProject, error)
-	Update(ctx context.Context, id string, a domain.AppProject) (domain.AppProject, error)
-	Delete(ctx context.Context, id string) error
+    List(ctx context.Context) ([]domain.AppProject, error)
+    Get(ctx context.Context, id string) (domain.AppProject, error)
+    Create(ctx context.Context, a domain.AppProject) (domain.AppProject, error)
+    Update(ctx context.Context, id string, a domain.AppProject) (domain.AppProject, error)
+    Delete(ctx context.Context, id string) error
+}
+
+type UsersRepository interface {
+    List(ctx context.Context, q string, page, limit int) ([]domain.User, domain.Meta, error)
+    Get(ctx context.Context, id string) (domain.User, error)
+    Create(ctx context.Context, u domain.User) (domain.User, error)
+    Update(ctx context.Context, id string, u domain.User) (domain.User, error)
+    Delete(ctx context.Context, id string) error
 }
