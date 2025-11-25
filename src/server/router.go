@@ -6,6 +6,7 @@ import (
     apiauth "infini_api/src/api/auth"
     apiauthors "infini_api/src/api/authors"
     apiposts "infini_api/src/api/posts"
+    apihello "infini_api/src/api/hello"
     "github.com/gin-gonic/gin"
 )
 
@@ -17,6 +18,7 @@ func BuildRouter(cfg config.Config, s Services) *gin.Engine {
     r.POST("/api/auth/login", apiauth.LoginHandler(s.Auth))
     r.GET("/api/authors", apiauthors.ListHandler(s.Authors))
     r.GET("/api/posts", apiposts.ListHandler(s.Posts))
+    r.GET("/api/hello", apihello.HelloHandler())
 
     return r
 }

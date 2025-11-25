@@ -1,22 +1,25 @@
-package main
+package photosservice
 
-import "context"
+import (
+    "context"
+    "infini_api/src/dao"
+    "infini_api/src/domain"
+)
 
 type PhotosService interface {
-    List(ctx context.Context, q string, sort string, page, limit int) ([]Photo, Meta, error)
-    Get(ctx context.Context, id string) (Photo, error)
-    Create(ctx context.Context, p Photo) (Photo, error)
-    Update(ctx context.Context, id string, p Photo) (Photo, error)
+    List(ctx context.Context, q string, sort string, page, limit int) ([]domain.Photo, domain.Meta, error)
+    Get(ctx context.Context, id string) (domain.Photo, error)
+    Create(ctx context.Context, p domain.Photo) (domain.Photo, error)
+    Update(ctx context.Context, id string, p domain.Photo) (domain.Photo, error)
     Delete(ctx context.Context, id string) error
 }
 
-type PhotosServiceImpl struct{ repo PhotosRepository }
+type PhotosServiceImpl struct{ repo dao.PhotosRepository }
 
-func NewPhotosService(repo PhotosRepository) *PhotosServiceImpl { return &PhotosServiceImpl{repo: repo} }
+func NewPhotosService(repo dao.PhotosRepository) *PhotosServiceImpl { return &PhotosServiceImpl{repo: repo} }
 
-func (s *PhotosServiceImpl) List(ctx context.Context, q string, sort string, page, limit int) ([]Photo, Meta, error) { return s.repo.List(ctx, q, sort, page, limit) }
-func (s *PhotosServiceImpl) Get(ctx context.Context, id string) (Photo, error) { return s.repo.Get(ctx, id) }
-func (s *PhotosServiceImpl) Create(ctx context.Context, p Photo) (Photo, error) { return s.repo.Create(ctx, p) }
-func (s *PhotosServiceImpl) Update(ctx context.Context, id string, p Photo) (Photo, error) { return s.repo.Update(ctx, id, p) }
+func (s *PhotosServiceImpl) List(ctx context.Context, q string, sort string, page, limit int) ([]domain.Photo, domain.Meta, error) { return s.repo.List(ctx, q, sort, page, limit) }
+func (s *PhotosServiceImpl) Get(ctx context.Context, id string) (domain.Photo, error) { return s.repo.Get(ctx, id) }
+func (s *PhotosServiceImpl) Create(ctx context.Context, p domain.Photo) (domain.Photo, error) { return s.repo.Create(ctx, p) }
+func (s *PhotosServiceImpl) Update(ctx context.Context, id string, p domain.Photo) (domain.Photo, error) { return s.repo.Update(ctx, id, p) }
 func (s *PhotosServiceImpl) Delete(ctx context.Context, id string) error { return s.repo.Delete(ctx, id) }
-

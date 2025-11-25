@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/*.go",
+      "use": "@vercel/go",
+      "config": { "goVersion": "1.23" }
+    }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "api/server.go" }
+  ],
+  "env": {
+    "APP_ENV": "production"
+  },
+  "buildCommand": "go mod tidy"
+}
