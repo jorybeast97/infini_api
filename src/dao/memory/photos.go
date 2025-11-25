@@ -19,7 +19,19 @@ func (r *PhotosRepo) List(ctx context.Context, q string, sortQ string, page, lim
         parts := strings.Split(sortQ, ",")
         for i := len(parts)-1; i>=0; i-- {
             fd := strings.Split(parts[i], ":"); field := fd[0]; dir := "asc"; if len(fd)>1 { dir = fd[1] }
-            sort.SliceStable(list, func(i,j int) bool { var vi,vj string; switch field { case "date": vi,vj=list[i].Date,list[j].Date; case "caption": vi,vj=list[i].Caption,list[j].Caption; default: vi,vj=list[i].ID,list[j].ID }; if dir=="desc" { return vi>vj }; return vi<vj })
+            sort.SliceStable(list, func(i,j int) bool {
+                switch field {
+                case "date":
+                    if dir=="desc" { return list[i].Date > list[j].Date }
+                    return list[i].Date < list[j].Date
+                case "caption":
+                    if dir=="desc" { return list[i].Caption > list[j].Caption }
+                    return list[i].Caption < list[j].Caption
+                default:
+                    if dir=="desc" { return list[i].ID > list[j].ID }
+                    return list[i].ID < list[j].ID
+                }
+            })
         }
     }
     data, meta := paginate(list, page, limit)

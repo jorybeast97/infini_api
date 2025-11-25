@@ -14,6 +14,7 @@ type MemoryStore struct {
     posts   []domain.BlogPost
     photos  []domain.Photo
     authors []domain.Author
+    users   []domain.User
 }
 
 func NewMemoryStore() *MemoryStore { return &MemoryStore{} }
@@ -29,17 +30,17 @@ func Seed(s *MemoryStore) {
     }
     if len(s.posts) == 0 {
         s.posts = []domain.BlogPost{
-            {ID: "1", Title: "The Future of Declarative UI", Excerpt: "Why keeping your UI logic declarative makes scaling easier than you think.", Content: "Full content here...", Date: "2024-03-15", ReadTime: "5 min read", Location: &domain.Location{Lat: 37.7749, Lng: -122.4194, Name: "San Francisco, CA"}},
-            {ID: "2", Title: "Nomad Life in Tokyo", Excerpt: "Spending a month working remotely from Shibuya.", Content: "Full content here...", Date: "2023-11-10", ReadTime: "8 min read", Location: &domain.Location{Lat: 35.6895, Lng: 139.6917, Name: "Tokyo, Japan"}},
-            {ID: "3", Title: "Building performant lists in React", Excerpt: "Virtualization techniques deep dive.", Content: "Full content here...", Date: "2023-09-22", ReadTime: "10 min read", Location: nil},
+            {ID: "1", Title: "The Future of Declarative UI", Excerpt: "Why keeping your UI logic declarative makes scaling easier than you think.", Content: "Full content here...", Date: 1710460800, ReadTime: "5 min read", Location: &domain.Location{Lat: 37.7749, Lng: -122.4194, Name: "San Francisco, CA"}},
+            {ID: "2", Title: "Nomad Life in Tokyo", Excerpt: "Spending a month working remotely from Shibuya.", Content: "Full content here...", Date: 1699574400, ReadTime: "8 min read", Location: &domain.Location{Lat: 35.6895, Lng: 139.6917, Name: "Tokyo, Japan"}},
+            {ID: "3", Title: "Building performant lists in React", Excerpt: "Virtualization techniques deep dive.", Content: "Full content here...", Date: 1695340800, ReadTime: "10 min read", Location: nil},
         }
     }
     if len(s.photos) == 0 {
         s.photos = []domain.Photo{
-            {ID: "1", URL: "https://picsum.photos/600/400?random=1", Caption: "Sunset over the Golden Gate", Date: "2024-03-10", Location: domain.Location{Lat: 37.8199, Lng: -122.4783, Name: "Golden Gate Bridge"}},
-            {ID: "2", URL: "https://picsum.photos/600/800?random=2", Caption: "Neon streets of Shinjuku", Date: "2023-11-15", Location: domain.Location{Lat: 35.6909, Lng: 139.7005, Name: "Shinjuku"}},
-            {ID: "3", URL: "https://picsum.photos/600/600?random=3", Caption: "Coffee shop vibes in Berlin", Date: "2023-08-05", Location: domain.Location{Lat: 52.5200, Lng: 13.4050, Name: "Berlin, Germany"}},
-            {ID: "4", URL: "https://picsum.photos/600/400?random=4", Caption: "Hiking in the Swiss Alps", Date: "2023-07-20", Location: domain.Location{Lat: 46.8182, Lng: 8.2275, Name: "Swiss Alps"}},
+            {ID: "1", URL: "https://picsum.photos/600/400?random=1", Caption: "Sunset over the Golden Gate", Date: 1710028800, Location: domain.Location{Lat: 37.8199, Lng: -122.4783, Name: "Golden Gate Bridge"}},
+            {ID: "2", URL: "https://picsum.photos/600/800?random=2", Caption: "Neon streets of Shinjuku", Date: 1700006400, Location: domain.Location{Lat: 35.6909, Lng: 139.7005, Name: "Shinjuku"}},
+            {ID: "3", URL: "https://picsum.photos/600/600?random=3", Caption: "Coffee shop vibes in Berlin", Date: 1691193600, Location: domain.Location{Lat: 52.5200, Lng: 13.4050, Name: "Berlin, Germany"}},
+            {ID: "4", URL: "https://picsum.photos/600/400?random=4", Caption: "Hiking in the Swiss Alps", Date: 1689811200, Location: domain.Location{Lat: 46.8182, Lng: 8.2275, Name: "Swiss Alps"}},
         }
     }
     if len(s.authors) == 0 {
@@ -49,6 +50,9 @@ func Seed(s *MemoryStore) {
             {ID: "2", Name: "Aria", Role: "UX Researcher", Avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop", Bio: "Decoding human behavior to build intuitive digital experiences.", Social: domain.Social{Linkedin: &li, Twitter: &tw}},
             {ID: "3", Name: "Cipher", Role: "Backend Engineer", Avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop", Bio: "Scalable infrastructure and secure data pipelines.", Social: domain.Social{Github: &gh}},
         }
+    }
+    if len(s.users) == 0 {
+        s.users = []domain.User{}
     }
     s.mu.Unlock()
 }
