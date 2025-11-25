@@ -27,6 +27,12 @@ func (r *UsersRepo) Get(ctx context.Context, id string) (domain.User, error) {
     return u, err
 }
 
+func (r *UsersRepo) GetByUserName(ctx context.Context, userName string) (domain.User, error) {
+    var u domain.User
+    err := r.db.WithContext(ctx).Where("user_name = ?", userName).First(&u).Error
+    return u, err
+}
+
 func (r *UsersRepo) Create(ctx context.Context, u domain.User) (domain.User, error) {
     now := time.Now().Unix()
     if u.ID == "" { u.ID = genID() }
@@ -46,4 +52,3 @@ func (r *UsersRepo) Update(ctx context.Context, id string, u domain.User) (domai
 func (r *UsersRepo) Delete(ctx context.Context, id string) error {
     return r.db.WithContext(ctx).Delete(&domain.User{}, "id = ?", id).Error
 }
-

@@ -1,19 +1,20 @@
 package users
 
 import (
-    "strconv"
     usersservice "infini_api/src/service/users"
     "github.com/gin-gonic/gin"
 )
 
+type usersListRequest struct { Q string `json:"q"`; Page int `json:"page"`; Limit int `json:"limit"` }
+type usersListResponse struct { Data interface{} `json:"data"`; Meta interface{} `json:"meta"` }
+
 func ListHandler(s *usersservice.UsersServiceImpl) gin.HandlerFunc {
     return func(c *gin.Context) {
-        q := c.Query("q")
-        page, _ := strconv.Atoi(c.Query("page")); if page==0 { page=1 }
-        limit, _ := strconv.Atoi(c.Query("limit")); if limit==0 { limit=20 }
-        data, meta, err := s.List(c.Request.Context(), q, page, limit)
-        if err != nil { c.JSON(400, gin.H{"error": err.Error()}); return }
-        c.JSON(200, gin.H{"data": data, "meta": meta})
+        var req usersListRequest
+        if err := c.ShouldBindJSON(&req); err != nil { c.JSON(400, usersListResponse{}); return }
+        if req.Page==0 { req.Page=1 }; if req.Limit==0 { req.Limit=20 }
+        data, meta, err := s.List(c.Request.Context(), req.Q, req.Page, req.Limit)
+        if err != nil { c.JSON(400, usersListResponse{}); return }
+        c.JSON(200, usersListResponse{Data: data, Meta: meta})
     }
 }
-

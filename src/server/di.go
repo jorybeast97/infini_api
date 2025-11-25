@@ -26,6 +26,7 @@ type Services struct {
     Authors *authorsservice.AuthorsServiceImpl
     Posts   *postsservice.PostsServiceImpl
     Users   *usersservice.UsersServiceImpl
+    Tokens  authservice.TokenService
 }
 
 func BuildRepos(store *memory.MemoryStore) Repos {
@@ -61,9 +62,10 @@ func BuildRepos(store *memory.MemoryStore) Repos {
 func BuildServices(cfg config.Config, r Repos) Services {
     jwt := authservice.NewJWTService(cfg.Secret)
     return Services{
-        Auth:    authservice.NewAuthService(jwt),
+        Auth:    authservice.NewAuthService(jwt, r.Users),
         Authors: authorsservice.NewAuthorsService(r.Authors),
         Posts:   postsservice.NewPostsService(r.Posts),
         Users:   usersservice.NewUsersService(r.Users),
+        Tokens:  jwt,
     }
 }
